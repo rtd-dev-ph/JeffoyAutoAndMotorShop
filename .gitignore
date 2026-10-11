@@ -15,3 +15,5 @@ dist/
 # IDE settings
 .vscode/
 .idea/
+/.vs
+/backend/JeffoyAutoAndMotorShop.Api/.vs

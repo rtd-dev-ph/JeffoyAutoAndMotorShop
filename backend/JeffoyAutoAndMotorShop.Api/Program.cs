@@ -1,12 +1,14 @@
 
 using JeffoyAutoAndMotorShop.Api.Data;
+using JeffoyAutoAndMotorShop.Api.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Register application services.
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 // Read the connection string from configuration/environment variables.
 var connectionString = builder.Configuration
@@ -21,6 +23,10 @@ if (string.IsNullOrWhiteSpace(connectionString))
 // Register EF Core with PostgreSQL.
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
+
+// Register application services
+builder.Services.AddScoped<IStockMovementService, StockMovementService>();
+builder.Services.AddScoped<ISalesService, SalesService>();
 
 var app = builder.Build();
 
@@ -57,7 +63,8 @@ app.MapGet("/health/database", async (
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
