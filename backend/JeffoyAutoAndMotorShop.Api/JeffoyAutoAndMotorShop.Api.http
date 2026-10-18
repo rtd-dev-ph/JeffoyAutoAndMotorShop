@@ -1,6 +1,57 @@
 @JeffoyAutoAndMotorShop.Api_HostAddress = http://localhost:5122
 
-GET {{JeffoyAutoAndMotorShop.Api_HostAddress}}/weatherforecast/
+### Health Check
+GET {{JeffoyAutoAndMotorShop.Api_HostAddress}}/health/database
 Accept: application/json
 
-###
+### Categories
+GET {{JeffoyAutoAndMotorShop.Api_HostAddress}}/api/categories
+Accept: application/json
+
+### Create a category
+POST {{JeffoyAutoAndMotorShop.Api_HostAddress}}/api/categories
+Content-Type: application/json
+
+{"name": "Engine Oil", "description": "Motor oils"}
+
+### Products
+GET {{JeffoyAutoAndMotorShop.Api_HostAddress}}/api/products
+Accept: application/json
+
+### Record opening stock
+POST {{JeffoyAutoAndMotorShop.Api_HostAddress}}/api/stock/1/opening
+Content-Type: application/json
+
+{"quantity": 100, "reason": "Initial inventory"}
+
+### Process a checkout
+POST {{JeffoyAutoAndMotorShop.Api_HostAddress}}/api/sales/checkout
+Content-Type: application/json
+
+{"items": [{"productId": 1, "quantity": 2}, {"productId": 2, "quantity": 1}], "paymentMethod": "Cash"}
+
+### View all sales
+GET {{JeffoyAutoAndMotorShop.Api_HostAddress}}/api/sales
+Accept: application/json
+
+### View a specific sale
+GET {{JeffoyAutoAndMotorShop.Api_HostAddress}}/api/sales/1
+Accept: application/json
+
+### Void a sale
+POST {{JeffoyAutoAndMotorShop.Api_HostAddress}}/api/sales/1/void
+Content-Type: application/json
+
+{"reason": "Customer cancelled"}
+
+### Low stock products
+GET {{JeffoyAutoAndMotorShop.Api_HostAddress}}/api/products/low-stock
+Accept: application/json
+
+### Daily sales report (defaults to today Manila date)
+GET {{JeffoyAutoAndMotorShop.Api_HostAddress}}/api/reports/daily-sales
+Accept: application/json
+
+### Daily sales report for a specific date
+GET {{JeffoyAutoAndMotorShop.Api_HostAddress}}/api/reports/daily-sales?date=2026-10-19
+Accept: application/json
