@@ -1,6 +1,7 @@
 using JeffoyAutoAndMotorShop.Api.Data;
 using JeffoyAutoAndMotorShop.Api.DTOs.Product;
 using JeffoyAutoAndMotorShop.Api.Models;
+using JeffoyAutoAndMotorShop.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,9 +9,10 @@ namespace JeffoyAutoAndMotorShop.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ProductsController(AppDbContext context) : ControllerBase
+public class ProductsController(AppDbContext context, IStockMovementService stockMovementService) : ControllerBase
 {
     private readonly AppDbContext _context = context;
+    private readonly IStockMovementService _stockMovementService = stockMovementService;
 
     /// <summary>
     /// GET /api/products
@@ -50,6 +52,29 @@ public class ProductsController(AppDbContext context) : ControllerBase
     {
         var products = await _context.Products
             .Where(p => p.IsActive && p.StockQuantity <= p.LowStockThreshold)
+            .Select(p => MapToDto(p))
+            .ToListAsync();
+
+        return Ok(products);
+    }
+
+    /// <summary>
+    /// GET /api/products/search?q={term}
+    /// Searches products by name or SKU (case-insensitive, partial match).
+    /// </summary>
+    [HttpGet("search")]
+    public async Task<ActionResult<IEnumerable<ProductDto>>> Search([FromQuery] string q)
+    {
+        if (string.IsNullOrWhiteSpace(q))
+        {
+            return Ok(new List<ProductDto>());
+        }
+
+        var searchTerm = q.ToLower().Trim();
+        var products = await _context.Products
+            .Include(p => p.Category)
+            .Where(p => p.IsActive
+                && (p.Name.ToLower().Contains(searchTerm) || p.SKU.ToLower().Contains(searchTerm)))
             .Select(p => MapToDto(p))
             .ToListAsync();
 
@@ -275,6 +300,15 @@ public class ProductsController(AppDbContext context) : ControllerBase
         _context.Products.Add(product);
         await _context.SaveChangesAsync();
 
+        // Record opening stock as a stock movement if > 0
+        if (product.StockQuantity > 0)
+        {
+            await _stockMovementService.RecordOpeningStockAsync(
+                product.Id,
+                product.StockQuantity,
+                createDto.OpeningStockReason ?? "Opening stock during product creation");
+        }
+
         var dto = MapToDto(product);
         return CreatedAtAction(
             nameof(GetById),
@@ -461,6 +495,7 @@ public class ProductsController(AppDbContext context) : ControllerBase
 
         // Soft delete — mark as inactive
         product.IsActive = false;
+        product.UpdatedAtUtc = DateTime.UtcNow;
         await _context.SaveChangesAsync();
 
         return Ok(new
