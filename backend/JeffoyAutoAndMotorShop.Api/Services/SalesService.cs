@@ -1,4 +1,5 @@
 using JeffoyAutoAndMotorShop.Api.Data;
+using JeffoyAutoAndMotorShop.Api.DTOs.Reports;
 using JeffoyAutoAndMotorShop.Api.DTOs.Sale;
 using JeffoyAutoAndMotorShop.Api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +39,12 @@ public interface ISalesService
     /// Gets sales for a specific date (using Asia/Manila timezone).
     /// </summary>
     Task<IEnumerable<SaleDto>> GetSalesByDateAsync(DateOnly date, bool includeVoided = false);
+
+    /// <summary>
+    /// Generates a daily sales summary report for the given date (Asia/Manila timezone).
+    /// Includes transaction count, total items sold, grand total, and payment method breakdown.
+    /// </summary>
+    Task<DailySalesReportDto> GenerateDailySalesReportAsync(DateOnly date, bool includeVoided = false);
 }
 
 public class SalesService(AppDbContext context) : ISalesService
@@ -316,6 +323,23 @@ public class SalesService(AppDbContext context) : ISalesService
             .ToListAsync();
 
         return sales.Select(s => MapToDto(s));
+    }
+
+    public async Task<DailySalesReportDto> GenerateDailySalesReportAsync(DateOnly date, bool includeVoided = false)
+    {
+        var sales = await GetSalesByDateAsync(date, includeVoided);
+        var salesList = sales.ToList();
+
+        return new DailySalesReportDto
+        {
+            Date = date,
+            TransactionCount = salesList.Count,
+            TotalItemsSold = salesList.Sum(s => s.Items?.Sum(i => i.Quantity) ?? 0),
+            TotalSales = salesList.Sum(s => s.GrandTotal),
+            CashTotal = salesList.Where(s => s.PaymentMethod == "Cash").Sum(s => s.GrandTotal),
+            GCashTotal = salesList.Where(s => s.PaymentMethod == "GCash").Sum(s => s.GrandTotal),
+            Sales = salesList
+        };
     }
 
     /// <summary>
