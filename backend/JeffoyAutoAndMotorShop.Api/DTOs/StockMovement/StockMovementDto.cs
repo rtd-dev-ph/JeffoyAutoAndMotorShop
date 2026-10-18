@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace JeffoyAutoAndMotorShop.Api.DTOs.StockMovement;
 
 /// <summary>
@@ -10,11 +12,13 @@ public class AdjustStockDto
     /// For restocking, use a positive value.
     /// For manual adjustments causing reduction, use a negative value.
     /// </summary>
+    [Required(ErrorMessage = "Quantity is required")]
     public int Quantity { get; set; }
 
     /// <summary>
     /// Reason or reference for the adjustment (e.g., "Received shipment", "Damaged goods").
     /// </summary>
+    [StringLength(200, ErrorMessage = "Reason must not exceed 200 characters")]
     public string? Reason { get; set; }
 }
 
@@ -56,10 +60,13 @@ public class OpeningStockDto
     /// <summary>
     /// The initial stock quantity for the product.
     /// </summary>
+    [Required(ErrorMessage = "Quantity is required")]
+    [Range(0, int.MaxValue, ErrorMessage = "Quantity must not be negative")]
     public int Quantity { get; set; }
 
     /// <summary>
     /// Optional reason or reference for the opening stock entry.
     /// </summary>
+    [StringLength(200, ErrorMessage = "Reason must not exceed 200 characters")]
     public string? Reason { get; set; }
 }

@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace JeffoyAutoAndMotorShop.Api.DTOs.Sale;
 
 /// <summary>
@@ -8,11 +10,15 @@ public class CheckoutItemDto
     /// <summary>
     /// The product ID to sell.
     /// </summary>
+    [Required(ErrorMessage = "ProductId is required")]
+    [Range(1, int.MaxValue, ErrorMessage = "ProductId must be a positive integer")]
     public int ProductId { get; set; }
 
     /// <summary>
     /// The quantity of this product to sell.
     /// </summary>
+    [Required(ErrorMessage = "Quantity is required")]
+    [Range(1, int.MaxValue, ErrorMessage = "Quantity must be at least 1")]
     public int Quantity { get; set; }
 }
 
@@ -22,17 +28,20 @@ public class CheckoutItemDto
 /// calculates totals, and processes the sale atomically.
 /// </summary>
 public class CheckoutDto
-{
-    /// <summary>
-    /// List of products and quantities to sell.
-    /// </summary>
-    public List<CheckoutItemDto> Items { get; set; } = new();
+    {
+        /// <summary>
+        /// List of products and quantities to sell.
+        /// </summary>
+        [Required(ErrorMessage = "Items list is required")]
+        public List<CheckoutItemDto> Items { get; set; } = new();
 
-    /// <summary>
-    /// Payment method: "Cash" or "GCash".
-    /// </summary>
-    public string PaymentMethod { get; set; } = string.Empty;
-}
+        /// <summary>
+        /// Payment method: "Cash" or "GCash".
+        /// </summary>
+        [Required(ErrorMessage = "PaymentMethod is required")]
+        [StringLength(20, ErrorMessage = "PaymentMethod must not exceed 20 characters")]
+        public string PaymentMethod { get; set; } = string.Empty;
+    }
 
 /// <summary>
 /// Response DTO returned after a successful checkout.
@@ -81,9 +90,11 @@ public class SaleDto
 /// DTO for voiding a sale.
 /// </summary>
 public class VoidSaleDto
-{
-    /// <summary>
-    /// Required reason for voiding the sale.
-    /// </summary>
-    public string Reason { get; set; } = string.Empty;
-}
+    {
+        /// <summary>
+        /// Required reason for voiding the sale.
+        /// </summary>
+        [Required(ErrorMessage = "Reason is required")]
+        [StringLength(500, ErrorMessage = "Reason must not exceed 500 characters")]
+        public string Reason { get; set; } = string.Empty;
+    }
