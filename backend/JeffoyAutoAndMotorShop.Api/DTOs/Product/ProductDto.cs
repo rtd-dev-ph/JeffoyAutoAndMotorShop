@@ -195,27 +195,3 @@ public class ProductDto
     public DateTime UpdatedAtUtc { get; set; }
 }
 
-/// <summary>
-/// DTO for returning low-stock products.
-/// </summary>
-public class LowStockProductDto
-{
-    public int Id { get; set; }
-    public string SKU { get; set; } = string.Empty;
-    public string Name { get; set; } = string.Empty;
-    public int StockQuantity { get; set; }
-    public int LowStockThreshold { get; set; }
-}
-
-/// <summary>
-/// DTO for search results.
-/// </summary>
-public class ProductSearchDto
-{
-    public int Id { get; set; }
-    public string SKU { get; set; } = string.Empty;
-    public string Name { get; set; } = string.Empty;
-    public decimal SellingPrice { get; set; }
-    public int StockQuantity { get; set; }
-    public bool IsLowStock { get; set; }
-}
