@@ -1,0 +1,20 @@
+
+.app-header {
+  padding: 1rem 2rem;
+  background: var(--accent);
+  color: white;
+}
+.app-header h1 { margin: 0; font-size: 1.5rem; }
+.health-good { color: #4ade80; }
+.health-bad { color: #f87171; }
+main { max-width: 1100px; margin: 0 auto; padding: 1rem; }
+.card { margin-bottom: 1.5rem; padding: 1.5rem; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; }
+button { margin-bottom: 1rem; padding: 0.5rem 1rem; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+h2 { margin-top: 0; }
+h3 { margin: 1rem 0 0.5rem; }
+.error { color: #f87171; margin: 0.5rem 0; }
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th { text-align: left; padding: 0.5rem; border-bottom: 2px solid var(--border); }
+.data-table td { padding: 0.5rem; border-bottom: 1px solid var(--border); }
+.report p { margin: 0.25rem 0; }
