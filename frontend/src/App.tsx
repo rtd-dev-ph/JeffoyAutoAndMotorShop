@@ -10,6 +10,7 @@ function App() {
           <Link to="/sales">Sales</Link>
           <Link to="/products">Products</Link>
           <Link to="/categories">Categories</Link>
+          <Link to="/stock">Stock</Link>
         </nav>
       </header>
       <main className="p-6">
