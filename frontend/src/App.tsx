@@ -7,6 +7,7 @@ function App() {
         <h1 className="text-xl font-semibold">Jeffoy Auto and Motor Shop</h1>
         <nav className="flex gap-4 text-sm">
           <Link to="/">POS</Link>
+          <Link to="/sales">Sales</Link>
           <Link to="/products">Products</Link>
           <Link to="/categories">Categories</Link>
         </nav>

@@ -9,6 +9,8 @@ import { ProductsPage } from './pages/ProductsPage.tsx'
 import { ProductFormPage } from './pages/ProductFormPage.tsx'
 import { CategoriesPage } from './pages/CategoriesPage.tsx'
 import { CategoryFormPage } from './pages/CategoryFormPage.tsx'
+import { SalesPage } from './pages/SalesPage.tsx'
+import { SaleDetailPage } from './pages/SaleDetailPage.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -23,6 +25,8 @@ createRoot(document.getElementById('root')!).render(
           <Route path="categories" element={<CategoriesPage />} />
           <Route path="categories/new" element={<CategoryFormPage />} />
           <Route path="categories/:id" element={<CategoryFormPage />} />
+          <Route path="sales" element={<SalesPage />} />
+          <Route path="sales/:id" element={<SaleDetailPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
