@@ -7,6 +7,8 @@ import { POSPage } from './pages/POSPage.tsx'
 import { ReceiptPage } from './pages/ReceiptPage.tsx'
 import { ProductsPage } from './pages/ProductsPage.tsx'
 import { ProductFormPage } from './pages/ProductFormPage.tsx'
+import { CategoriesPage } from './pages/CategoriesPage.tsx'
+import { CategoryFormPage } from './pages/CategoryFormPage.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -18,6 +20,9 @@ createRoot(document.getElementById('root')!).render(
           <Route path="products" element={<ProductsPage />} />
           <Route path="products/new" element={<ProductFormPage />} />
           <Route path="products/:id" element={<ProductFormPage />} />
+          <Route path="categories" element={<CategoriesPage />} />
+          <Route path="categories/new" element={<CategoryFormPage />} />
+          <Route path="categories/:id" element={<CategoryFormPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

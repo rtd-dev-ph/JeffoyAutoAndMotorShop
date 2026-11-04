@@ -8,6 +8,7 @@ function App() {
         <nav className="flex gap-4 text-sm">
           <Link to="/">POS</Link>
           <Link to="/products">Products</Link>
+          <Link to="/categories">Categories</Link>
         </nav>
       </header>
       <main className="p-6">
