@@ -1,5 +1,6 @@
 using JeffoyAutoAndMotorShop.Api.DTOs.Reports;
 using JeffoyAutoAndMotorShop.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JeffoyAutoAndMotorShop.Api.Controllers;
@@ -20,6 +21,7 @@ public class ReportsController(ISalesService salesService) : ControllerBase
     /// If no date is provided, defaults to today's date in Manila timezone.
     /// </summary>
     [HttpGet("daily-sales")]
+    [Authorize(Roles = "Owner")]
     public async Task<ActionResult<DailySalesReportDto>> GetDailySalesReport(
         [FromQuery] DateOnly? date = null,
         [FromQuery] bool includeVoided = false)

@@ -2,6 +2,7 @@ using JeffoyAutoAndMotorShop.Api.Data;
 using JeffoyAutoAndMotorShop.Api.DTOs.Product;
 using JeffoyAutoAndMotorShop.Api.Models;
 using JeffoyAutoAndMotorShop.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -134,6 +135,7 @@ public class ProductsController(AppDbContext context, IStockMovementService stoc
     /// Creates a new product.
     /// </summary>
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<ProductDto>> Create([FromBody] CreateProductDto createDto)
     {
         // --- SKU validation ---
@@ -321,6 +323,7 @@ public class ProductsController(AppDbContext context, IStockMovementService stoc
     /// Updates an existing product.
     /// </summary>
     [HttpPut("{id:int}")]
+    [Authorize]
     public async Task<ActionResult<ProductDto>> Update(int id, [FromBody] UpdateProductDto updateDto)
     {
         var product = await _context.Products
@@ -467,6 +470,7 @@ public class ProductsController(AppDbContext context, IStockMovementService stoc
     /// This prevents accidental data loss and preserves historical references.
     /// </summary>
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = "Owner")]
     public async Task<ActionResult> Deactivate(int id)
     {
         var product = await _context.Products

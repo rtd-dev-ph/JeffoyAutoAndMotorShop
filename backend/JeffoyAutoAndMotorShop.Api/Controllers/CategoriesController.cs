@@ -1,6 +1,7 @@
 using JeffoyAutoAndMotorShop.Api.Data;
 using JeffoyAutoAndMotorShop.Api.DTOs.Category;
 using JeffoyAutoAndMotorShop.Api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -70,6 +71,7 @@ public class CategoriesController(AppDbContext context) : ControllerBase
     /// Creates a new category.
     /// </summary>
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult> Create([FromBody] CreateCategoryDto createDto)
     {
         // Check for duplicate name (case-insensitive)
@@ -108,6 +110,7 @@ public class CategoriesController(AppDbContext context) : ControllerBase
     /// Updates an existing category.
     /// </summary>
     [HttpPut("{id:int}")]
+    [Authorize]
     public async Task<ActionResult> Update(int id, [FromBody] UpdateCategoryDto updateDto)
     {
         var category = await _context.Categories.FindAsync(id);
@@ -151,6 +154,7 @@ public class CategoriesController(AppDbContext context) : ControllerBase
     /// This prevents accidental data loss and preserves historical references.
     /// </summary>
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = "Owner")]
     public async Task<ActionResult> Deactivate(int id)
     {
         var category = await _context.Categories

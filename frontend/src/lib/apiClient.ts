@@ -13,6 +13,8 @@
 
 import { API_BASE_URL } from './config';
 
+const TOKEN_KEY = 'jaams_token';
+
 export class ApiError extends Error {
   public status: number;
   public statusText: string;
@@ -43,11 +45,17 @@ async function request<T>(
   url: string,
   options: RequestInit = {},
 ): Promise<T> {
+  const token = localStorage.getItem(TOKEN_KEY);
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...(options.headers as Record<string, string> | undefined),
+  };
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
   const response = await fetch(`${API_BASE_URL}${url}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
+    headers,
     ...options,
   });
 
@@ -66,6 +74,9 @@ async function request<T>(
         response.status,
         response.statusText,
       );
+    }
+    if (response.status === 401) {
+      localStorage.removeItem(TOKEN_KEY);
     }
     throw new ApiError(
       (typeof data === 'string' ? data : undefined) || response.statusText || 'Request failed',

@@ -1,5 +1,6 @@
 using JeffoyAutoAndMotorShop.Api.DTOs.Sale;
 using JeffoyAutoAndMotorShop.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JeffoyAutoAndMotorShop.Api.Controllers;
@@ -17,6 +18,7 @@ public class SalesController(ISalesService salesService) : ControllerBase
     /// All operations are atomic within a database transaction.
     /// </summary>
     [HttpPost("checkout")]
+    [Authorize]
     public async Task<ActionResult<CheckoutResponseDto>> Checkout([FromBody] CheckoutDto checkoutDto)
     {
         try
@@ -118,6 +120,7 @@ public class SalesController(ISalesService salesService) : ControllerBase
     /// and marks the sale as voided.
     /// </summary>
     [HttpPost("{id:int}/void")]
+    [Authorize(Roles = "Owner")]
     public async Task<ActionResult<SaleDto>> Void(int id, [FromBody] VoidSaleDto voidDto)
     {
         if (string.IsNullOrWhiteSpace(voidDto.Reason))

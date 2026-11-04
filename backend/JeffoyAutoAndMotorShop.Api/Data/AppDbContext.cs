@@ -18,6 +18,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
 
     public DbSet<SaleItem> SaleItems => Set<SaleItem>();
 
+    public DbSet<User> Users => Set<User>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

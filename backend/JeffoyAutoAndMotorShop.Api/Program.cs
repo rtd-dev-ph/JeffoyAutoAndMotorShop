@@ -1,7 +1,12 @@
 
 using JeffoyAutoAndMotorShop.Api.Data;
+using JeffoyAutoAndMotorShop.Api.Models;
 using JeffoyAutoAndMotorShop.Api.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,13 +32,62 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Register application services
 builder.Services.AddScoped<IStockMovementService, StockMovementService>();
 builder.Services.AddScoped<ISalesService, SalesService>();
+builder.Services.AddScoped<JwtService>();
+
+// Configure JWT authentication
+var jwtKey = builder.Configuration["Jwt:Key"];
+var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+var jwtAudience = builder.Configuration["Jwt:Audience"];
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtIssuer,
+        ValidAudience = jwtAudience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!))
+    };
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("CashierOrOwner", policy =>
+        policy.RequireRole("Cashier", "Owner"));
+    options.AddPolicy("OwnerOnly", policy =>
+        policy.RequireRole("Owner"));
+});
 
 var app = builder.Build();
 
+// Seed default Owner user if none exist
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    if (!await db.Users.AnyAsync())
+    {
+        db.Users.Add(new User
+        {
+            Username = "admin",
+            Email = "admin@jeffoy.local",
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin123!"),
+            Role = UserRole.Owner,
+            IsActive = true,
+            CreatedAtUtc = DateTime.UtcNow
+        });
+        await db.SaveChangesAsync();
+    }
+}
 
 // Test database connectivity without exposing credentials.
-
-
 app.MapGet("/health/database", async (
     AppDbContext db,
     ILogger<Program> logger) =>
@@ -59,7 +113,6 @@ app.MapGet("/health/database", async (
     }
 });
 
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -68,6 +121,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 

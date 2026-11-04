@@ -1,5 +1,6 @@
 using JeffoyAutoAndMotorShop.Api.DTOs.StockMovement;
 using JeffoyAutoAndMotorShop.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JeffoyAutoAndMotorShop.Api.Controllers;
@@ -55,6 +56,7 @@ public class StockController(IStockMovementService stockService) : ControllerBas
     /// Records a restock for a product.
     /// </summary>
     [HttpPost("{productId:int}/reorder")]
+    [Authorize]
     public async Task<IActionResult> RecordRestock(int productId, [FromBody] AdjustStockDto dto)
     {
         try
