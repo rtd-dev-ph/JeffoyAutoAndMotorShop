@@ -1,10 +1,14 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, Link } from 'react-router-dom';
 
 function App() {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="border-b px-6 py-4">
-        <h1 className="text-xl font-semibold">Jeffoy Auto and Motor Shop — POS</h1>
+      <header className="border-b px-6 py-4 flex items-center justify-between">
+        <h1 className="text-xl font-semibold">Jeffoy Auto and Motor Shop</h1>
+        <nav className="flex gap-4 text-sm">
+          <Link to="/">POS</Link>
+          <Link to="/products">Products</Link>
+        </nav>
       </header>
       <main className="p-6">
         <Outlet />
