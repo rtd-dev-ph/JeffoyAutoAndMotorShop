@@ -13,13 +13,15 @@ import { SalesPage } from './pages/SalesPage.tsx'
 import { SaleDetailPage } from './pages/SaleDetailPage.tsx'
 import { StockPage } from './pages/StockPage.tsx'
 import { RestockPage } from './pages/RestockPage.tsx'
+import { DashboardPage } from './pages/DashboardPage.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />}>
-          <Route index element={<POSPage />} />
+          <Route index element={<DashboardPage />} />
+          <Route path="pos" element={<POSPage />} />
           <Route path="receipt" element={<ReceiptPage />} />
           <Route path="products" element={<ProductsPage />} />
           <Route path="products/new" element={<ProductFormPage />} />
@@ -31,6 +33,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="sales/:id" element={<SaleDetailPage />} />
           <Route path="stock" element={<StockPage />} />
           <Route path="stock/restock" element={<RestockPage />} />
+          <Route path="dashboard" element={<DashboardPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
