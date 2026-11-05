@@ -32,53 +32,53 @@ export function DashboardPage() {
   const recentSales: SaleDto[] = report.sales.slice(0, 5);
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col lg:flex-row lg:items-end gap-4">
-        <div className="flex-1">
-          <h2 className="text-xl font-semibold text-foreground">Dashboard</h2>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h2 className="text-xl sm:text-2xl font-semibold text-foreground">Dashboard</h2>
           <p className="text-sm text-muted-foreground">{report.date}</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-5">
         <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">Transactions</CardTitle>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs sm:text-sm font-medium">Transactions</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{report.transactionCount}</div>
+            <div className="text-lg sm:text-2xl font-bold">{report.transactionCount}</div>
           </CardContent>
         </Card>
         <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">Items Sold</CardTitle>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs sm:text-sm font-medium">Items Sold</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{report.totalItemsSold}</div>
+            <div className="text-lg sm:text-2xl font-bold">{report.totalItemsSold}</div>
           </CardContent>
         </Card>
         <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">Total Sales</CardTitle>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs sm:text-sm font-medium">Total Sales</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">₱{report.totalSales.toFixed(2)}</div>
+            <div className="text-lg sm:text-2xl font-bold">₱{report.totalSales.toFixed(2)}</div>
           </CardContent>
         </Card>
         <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">Cash</CardTitle>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs sm:text-sm font-medium">Cash</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">₱{report.cashTotal.toFixed(2)}</div>
+            <div className="text-lg sm:text-2xl font-bold">₱{report.cashTotal.toFixed(2)}</div>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">GCash</CardTitle>
+        <Card className="col-span-2 sm:col-span-1">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs sm:text-sm font-medium">GCash</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">₱{report.gCashTotal.toFixed(2)}</div>
+            <div className="text-lg sm:text-2xl font-bold">₱{report.gCashTotal.toFixed(2)}</div>
           </CardContent>
         </Card>
       </div>
@@ -96,7 +96,7 @@ export function DashboardPage() {
                   <TableHead className="text-right">Total</TableHead>
                   <TableHead>Payment</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Date</TableHead>
+                  <TableHead className="text-right hidden sm:table-cell">Date</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -129,7 +129,7 @@ export function DashboardPage() {
                           {s.status}
                         </span>
                       </TableCell>
-                      <TableCell className="text-right text-sm text-muted-foreground">
+                      <TableCell className="text-right text-sm text-muted-foreground hidden sm:table-cell">
                         {new Date(s.createdAtUtc).toLocaleDateString()}
                       </TableCell>
                     </TableRow>
