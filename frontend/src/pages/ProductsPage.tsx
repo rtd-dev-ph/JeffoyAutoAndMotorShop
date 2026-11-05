@@ -32,9 +32,7 @@ export function ProductsPage() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Products</CardTitle>
-        <Button asChild>
-          <Link to="/products/new">Create Product</Link>
-        </Button>
+        <Button onClick={() => window.location.href = '/products/new'}>Create Product</Button>
       </CardHeader>
       <CardContent className="space-y-4">
         {error && <div className="text-sm text-destructive">{error}</div>}
@@ -64,9 +62,7 @@ export function ProductsPage() {
                 <TableCell>{p.isLowStock ? 'Yes' : 'No'}</TableCell>
                 <TableCell>{p.isActive ? 'Yes' : 'No'}</TableCell>
                 <TableCell>
-                  <Button variant="outline" size="sm" asChild>
-                    <Link to={`/products/${p.id}`}>Edit</Link>
-                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => window.location.href = `/products/${p.id}`}>Edit</Button>
                 </TableCell>
               </TableRow>
             ))}

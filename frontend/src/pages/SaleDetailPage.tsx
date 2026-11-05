@@ -61,9 +61,7 @@ export function SaleDetailPage() {
         <CardContent className="space-y-4">
           {error && <div className="text-sm text-destructive">{error}</div>}
           {loading && <div className="text-sm text-muted-foreground">Loading...</div>}
-          <Button asChild>
-            <Link to="/sales">Back</Link>
-          </Button>
+          <Button onClick={() => window.location.href = '/sales'}>Back</Button>
         </CardContent>
       </Card>
     );
@@ -122,9 +120,7 @@ export function SaleDetailPage() {
           </div>
         )}
         {error && <div className="text-sm text-destructive">{error}</div>}
-        <Button asChild>
-          <Link to="/sales">Back</Link>
-        </Button>
+        <Button onClick={() => window.location.href = '/sales'}>Back</Button>
       </CardContent>
     </Card>
   );

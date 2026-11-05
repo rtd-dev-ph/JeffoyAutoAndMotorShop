@@ -32,9 +32,7 @@ export function CategoriesPage() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Categories</CardTitle>
-        <Button asChild>
-          <Link to="/categories/new">Create Category</Link>
-        </Button>
+        <Button onClick={() => window.location.href = '/categories/new'}>Create Category</Button>
       </CardHeader>
       <CardContent className="space-y-4">
         {error && <div className="text-sm text-destructive">{error}</div>}
@@ -54,9 +52,7 @@ export function CategoriesPage() {
                 <TableCell>{c.description || '-'}</TableCell>
                 <TableCell>{c.isActive ? 'Yes' : 'No'}</TableCell>
                 <TableCell>
-                  <Button variant="outline" size="sm" asChild>
-                    <Link to={`/categories/${c.id}`}>Edit</Link>
-                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => window.location.href = `/categories/${c.id}`}>Edit</Button>
                 </TableCell>
               </TableRow>
             ))}

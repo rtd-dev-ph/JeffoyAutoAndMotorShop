@@ -1,10 +1,17 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { apiClient } from '@/lib/apiClient';
-import type { SaleDto } from '@/types/api';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { apiClient } from "@/lib/apiClient";
+import type { SaleDto } from "@/types/api";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export function SalesPage() {
   const [sales, setSales] = useState<SaleDto[]>([]);
@@ -15,10 +22,10 @@ export function SalesPage() {
     setLoading(true);
     setError(null);
     try {
-      const data = await apiClient.get<SaleDto[]>('/api/sales');
+      const data = await apiClient.get<SaleDto[]>("/api/sales");
       setSales(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load sales');
+      setError(err instanceof Error ? err.message : "Failed to load sales");
     } finally {
       setLoading(false);
     }
@@ -50,20 +57,30 @@ export function SalesPage() {
             {sales.map((s) => (
               <TableRow key={s.id}>
                 <TableCell>{s.saleNumber}</TableCell>
-                <TableCell>{new Date(s.createdAtUtc).toLocaleString()}</TableCell>
-                <TableCell className="text-right">₱{s.grandTotal.toFixed(2)}</TableCell>
+                <TableCell>
+                  {new Date(s.createdAtUtc).toLocaleString()}
+                </TableCell>
+                <TableCell className="text-right">
+                  ₱{s.grandTotal.toFixed(2)}
+                </TableCell>
                 <TableCell>{s.paymentMethod}</TableCell>
                 <TableCell>{s.status}</TableCell>
                 <TableCell>
-                  <Button variant="outline" size="sm" asChild>
-                    <Link to={`/sales/${s.id}`}>View</Link>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => (window.location.href = `/sales/${s.id}`)}
+                  >
+                    View
                   </Button>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-        {loading && <div className="text-sm text-muted-foreground">Loading...</div>}
+        {loading && (
+          <div className="text-sm text-muted-foreground">Loading...</div>
+        )}
       </CardContent>
     </Card>
   );

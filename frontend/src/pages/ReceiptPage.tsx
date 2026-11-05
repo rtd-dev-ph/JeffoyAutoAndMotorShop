@@ -16,9 +16,7 @@ export function ReceiptPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div>No receipt data. Complete a checkout from POS.</div>
-          <Button asChild>
-            <Link to="/">Back to POS</Link>
-          </Button>
+          <Button onClick={() => window.location.href = '/'}>Back to POS</Button>
         </CardContent>
       </Card>
     );
@@ -63,9 +61,7 @@ export function ReceiptPage() {
           </TableBody>
         </Table>
         <div className="text-right text-lg font-semibold">Grand Total: ₱{receipt.grandTotal.toFixed(2)}</div>
-        <Button asChild>
-          <Link to="/">New Sale</Link>
-        </Button>
+        <Button onClick={() => window.location.href = '/'}>New Sale</Button>
       </CardContent>
     </Card>
   );

@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { apiClient } from '@/lib/apiClient';
 import type { CategoryDto, CreateCategoryDto, UpdateCategoryDto } from '@/types/api';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { ConfirmDialog } from "@/components/ui/confirm-dialog"
 
 export function CategoryFormPage() {
   const { id } = useParams();
@@ -18,6 +19,7 @@ export function CategoryFormPage() {
   const [isActive, setIsActive] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   useEffect(() => {
     apiClient.get<CategoryDto[]>('/api/categories').then(setCategories).catch(() => setCategories([]));
@@ -35,6 +37,14 @@ export function CategoryFormPage() {
   }, [isEdit, categories, id]);
 
   async function submit() {
+    if (!name.trim()) {
+      setError('Category name is required');
+      return;
+    }
+    setConfirmOpen(true);
+  }
+
+  async function handleSave() {
     setLoading(true);
     setError(null);
     try {
@@ -73,8 +83,9 @@ export function CategoryFormPage() {
   }
 
   return (
-    <Card className="mx-auto max-w-md">
-      <CardHeader>
+    <>
+      <Card className="mx-auto max-w-md">
+        <CardHeader>
         <CardTitle>{isEdit ? 'Edit Category' : 'Create Category'}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -101,6 +112,17 @@ export function CategoryFormPage() {
           </Button>
         </div>
       </CardContent>
-    </Card>
+      </Card>
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        title="Confirm Save"
+        description="Are you sure you want to save this category?"
+        onConfirm={handleSave}
+        confirmLabel={isEdit ? 'Update Category' : 'Create Category'}
+        confirmVariant="default"
+        loading={loading}
+      />
+    </>
   );
 }

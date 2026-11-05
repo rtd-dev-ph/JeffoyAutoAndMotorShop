@@ -192,12 +192,15 @@ export function POSPage() {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label className="text-sm">Payment Method</Label>
+                <Label htmlFor="payment-method" className="text-sm">Payment Method</Label>
                 <Select
+                  id="payment-method"
+                  name="paymentMethod"
+                  items={{ Cash: 'Cash', GCash: 'GCash' }}
                   value={paymentMethod}
                   onValueChange={(v: string | null) => setPaymentMethod((v ?? 'Cash') as 'Cash' | 'GCash')}
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger id="payment-method" className="w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
