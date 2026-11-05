@@ -8,28 +8,50 @@ function App() {
 
   function handleLogout() {
     auth?.logout()
-    navigate('/login')
+    navigate('/login', { replace: true })
   }
+
+  const user = auth?.user
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="border-b px-6 py-4 flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Jeffoy Auto and Motor Shop</h1>
-        <nav className="flex gap-4 text-sm items-center">
-          <Link to="/">Dashboard</Link>
-          <Link to="/pos">POS</Link>
-          <Link to="/sales">Sales</Link>
-          <Link to="/products">Products</Link>
-          <Link to="/categories">Categories</Link>
-          <Link to="/stock">Stock</Link>
+      <header className="border-b px-4 py-3 flex items-center justify-between bg-card sticky top-0 z-10">
+        <div className="flex items-center gap-3">
+          <span className="font-bold text-lg tracking-tight">JEFFOY</span>
+          <span className="text-sm font-medium text-muted-foreground">Auto &amp; Motor Shop</span>
+        </div>
+        <nav className="flex items-center gap-4 text-sm items-center">
+          <Link to="/" className="flex items-center gap-1.5">
+            <span>🏠</span> Dashboard
+          </Link>
+          <Link to="/pos" className="flex items-center gap-1.5">
+            <span>💰</span> POS
+          </Link>
+          <Link to="/sales" className="flex items-center gap-1.5">
+            <span>🧾</span> Sales
+          </Link>
+          <Link to="/products" className="flex items-center gap-1.5">
+            <span>📦</span> Products
+          </Link>
+          <Link to="/categories" className="flex items-center gap-1.5">
+            <span>🏷️</span> Categories
+          </Link>
+          <Link to="/stock" className="flex items-center gap-1.5">
+            <span>📊</span> Stock
+          </Link>
           {auth?.isAuthenticated ? (
-            <button type="button" onClick={handleLogout} className="text-muted-foreground">Logout ({auth.user?.username || 'user'})</button>
+            <button type="button" onClick={handleLogout} className="flex items-center gap-2 px-3 py-1.5 rounded-md text-muted-foreground hover:bg-secondary hover:text-secondary-foreground transition-colors">
+              <span>🚪</span>
+              <span className="hidden sm:inline">Logout ({user?.username || 'user'})</span>
+            </button>
           ) : (
-            <Link to="/login">Login</Link>
+            <Link to="/login" className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-primary text-primary-foreground text-sm font-medium">
+              Login
+            </Link>
           )}
         </nav>
       </header>
-      <main className="p-6">
+      <main className="p-4 sm:p-6 max-w-7xl mx-auto">
         <Outlet />
       </main>
     </div>

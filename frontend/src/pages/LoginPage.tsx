@@ -16,7 +16,7 @@ export function LoginPage() {
     setLoading(true);
     try {
       await auth!.login(username, password);
-      navigate('/');
+      navigate('/', { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');
     } finally {

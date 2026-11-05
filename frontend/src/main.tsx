@@ -16,6 +16,7 @@ import { StockPage } from './pages/StockPage.tsx'
 import { RestockPage } from './pages/RestockPage.tsx'
 import { DashboardPage } from './pages/DashboardPage.tsx'
 import { LoginPage } from './pages/LoginPage.tsx'
+import { RequireAuth } from './components/RequireAuth.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -23,7 +24,7 @@ createRoot(document.getElementById('root')!).render(
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/" element={<App />}>
+          <Route path="/" element={<RequireAuth><App /></RequireAuth>}>
             <Route index element={<DashboardPage />} />
             <Route path="pos" element={<POSPage />} />
             <Route path="receipt" element={<ReceiptPage />} />
