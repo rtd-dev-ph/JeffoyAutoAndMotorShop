@@ -2,6 +2,7 @@ using JeffoyAutoAndMotorShop.Api.Data;
 using JeffoyAutoAndMotorShop.Api.DTOs.Auth;
 using JeffoyAutoAndMotorShop.Api.Models;
 using JeffoyAutoAndMotorShop.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,6 +33,16 @@ public class AuthController(AppDbContext context, JwtService jwtService) : Contr
 
         var (token, expiresAt) = _jwtService.GenerateToken(user);
 
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = false,
+            SameSite = SameSiteMode.Lax,
+            Expires = expiresAt,
+            Path = "/"
+        };
+        Response.Cookies.Append("auth_token", token, cookieOptions);
+
         return Ok(new LoginResponseDto
         {
             Token = token,
@@ -40,5 +51,28 @@ public class AuthController(AppDbContext context, JwtService jwtService) : Contr
             Username = user.Username,
             Role = user.Role.ToString()
         });
+    }
+
+    [HttpPost("logout")]
+    public IActionResult Logout()
+    {
+        Response.Cookies.Append("auth_token", string.Empty, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = false,
+            SameSite = SameSiteMode.Lax,
+            Expires = DateTime.UtcNow.AddDays(-1),
+            Path = "/"
+        });
+        return Ok(new { message = "Logged out" });
+    }
+
+    [HttpGet("me")]
+    [Authorize]
+    public IActionResult Me()
+    {
+        var username = User.Identity?.Name ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        var role = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+        return Ok(new { username, role });
     }
 }

@@ -56,6 +56,7 @@ async function request<T>(
 
   const response = await fetch(`${API_BASE_URL}${url}`, {
     headers,
+    credentials: 'include',
     ...options,
   });
 

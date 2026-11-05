@@ -90,7 +90,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setState({ token: res.token, user: res });
   }, []);
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    try {
+      await apiClient.post('/api/auth/logout');
+    } catch {
+      // ignore
+    }
     setState({ token: null, user: null });
   }, []);
 
