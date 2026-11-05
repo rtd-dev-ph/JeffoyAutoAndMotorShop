@@ -11,6 +11,8 @@
 # React / Node.js build output
 node_modules/
 dist/
+playwright-report/
+test-results/
 
 # IDE settings
 .vscode/
