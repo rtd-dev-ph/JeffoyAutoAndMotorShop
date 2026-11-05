@@ -77,6 +77,8 @@ async function request<T>(
     }
     if (response.status === 401) {
       localStorage.removeItem(TOKEN_KEY);
+      // Dispatch event so AuthContext can react
+      window.dispatchEvent(new Event('auth:logout'));
     }
     throw new ApiError(
       (typeof data === 'string' ? data : undefined) || response.statusText || 'Request failed',
