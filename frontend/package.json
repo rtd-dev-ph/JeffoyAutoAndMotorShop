@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "typecheck:tests": "tsc -p tsconfig.tests.json"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
@@ -23,6 +26,7 @@
     "tailwindcss": "^4.3.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.1",
     "@types/node": "^24.19.2",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
