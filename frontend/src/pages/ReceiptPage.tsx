@@ -1,4 +1,4 @@
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import type { CheckoutResponseDto } from '@/types/api';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

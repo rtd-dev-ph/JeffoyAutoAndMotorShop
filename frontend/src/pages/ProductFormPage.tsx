@@ -137,32 +137,6 @@ export function ProductFormPage() {
     }
   }
 
-  async function toggleActive() {
-    if (!isEdit || !id) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const p = products.find((x) => x.id === Number(id));
-      if (!p) throw new Error('Product not found');
-      const body: UpdateProductDto = {
-        sku: p.sku,
-        name: p.name,
-        description: p.description,
-        categoryId: p.categoryId,
-        costPrice: p.costPrice,
-        sellingPrice: p.sellingPrice,
-        lowStockThreshold: p.lowStockThreshold,
-        isActive: !p.isActive,
-      };
-      await apiClient.put(`/api/products/${id}`, body);
-      navigate('/products');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Update failed');
-    } finally {
-      setLoading(false);
-    }
-  }
-
   return (
     <>
       <Card className="mx-auto max-w-2xl">

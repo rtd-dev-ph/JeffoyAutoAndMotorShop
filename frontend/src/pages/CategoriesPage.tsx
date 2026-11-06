@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { apiClient } from '@/lib/apiClient';
 import type { CategoryDto } from '@/types/api';
 import { Button } from '@/components/ui/button';

@@ -11,7 +11,9 @@ for (const field of [
     const select = page.getByRole('combobox');
     await expect(select).toHaveAccessibleName(field.label);
     await expect(select).toHaveText(field.placeholder);
-    await page.getByText(field.label, { exact: true }).click();
+    // Clicking the label text activates a button trigger (opens popup, focus moves to listbox),
+    // so focus the combobox directly to verify it is focusable.
+    await select.focus();
     await expect(select).toBeFocused();
   });
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { apiClient } from '@/lib/apiClient';
 import type { SaleDto, VoidSaleDto } from '@/types/api';
 import { Button } from '@/components/ui/button';
