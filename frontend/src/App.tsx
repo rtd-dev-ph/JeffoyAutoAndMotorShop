@@ -2,7 +2,7 @@ import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
 import { useContext, useState, useEffect, useRef } from 'react'
 import { AuthContext } from '@/contexts/AuthContext'
 
-const sections = [
+const baseSections = [
   { to: '/', label: 'Dashboard', icon: '🏠' },
   { to: '/pos', label: 'POS', icon: '💰' },
   { to: '/sales', label: 'Sales', icon: '🧾' },
@@ -16,6 +16,10 @@ function App() {
   const auth = useContext(AuthContext)
   const navigate = useNavigate()
   const { pathname } = useLocation()
+  const isOwner = auth?.user?.role === 'Owner'
+  const sections = isOwner
+    ? [...baseSections, { to: '/users', label: 'Users', icon: '👤' }]
+    : baseSections
   const activeSection = pathname === '/dashboard' ? '/' : pathname === '/receipt' ? '/pos' : `/${pathname.split('/')[1]}`
   const menuButtonRef = useRef<HTMLButtonElement>(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)

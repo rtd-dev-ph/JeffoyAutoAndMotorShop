@@ -19,4 +19,12 @@ export interface UserDto {
   email: string;
   role: string;
   isActive: boolean;
+  createdAtUtc?: string;
+}
+
+export interface CreateUserDto {
+  username: string;
+  email: string;
+  password: string;
+  role: string;
 }

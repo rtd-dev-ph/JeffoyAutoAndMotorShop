@@ -18,6 +18,7 @@ import { DashboardPage } from './pages/DashboardPage.tsx'
 import { LoginPage } from './pages/LoginPage.tsx'
 import { RequireAuth } from './components/RequireAuth.tsx'
 import { ReportsPage } from './pages/ReportsPage.tsx'
+import { UsersPage } from './pages/UsersPage.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -41,6 +42,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="stock/restock" element={<RestockPage />} />
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="reports" element={<ReportsPage />} />
+            <Route path="users" element={<UsersPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
