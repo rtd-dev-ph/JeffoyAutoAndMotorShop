@@ -1,4 +1,4 @@
-# JeffoyAutoAndMotorShop
+# Jeffoy Auto And Motor Shop
 
 A web-based inventory and sales management system for **Jeffoy Auto and Motor Shop** — POS, product/category/inventory management, stock movements, sales history, and reporting.
 
