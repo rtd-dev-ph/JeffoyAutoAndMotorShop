@@ -1,9 +1,14 @@
 # JeffoyAutoAndMotorShop
 
-A web-based inventory and sales management system for Jeffoy Auto and Motor Shop.
+A web-based inventory and sales management system for **Jeffoy Auto and Motor Shop** — POS, product/category/inventory management, stock movements, sales history, and reporting.
+
+- Repo: https://github.com/rtd-dev-ph/JeffoyAutoAndMotorShop
+- Live demo (GitHub Pages, frontend-only, no backend): https://rtd-dev-ph.github.io/JeffoyAutoAndMotorShop/
+
+## Tech stack
 
 | Layer | Choice |
-| :--- | :--- |
+|---|---|
 | Backend | ASP.NET Core Web API, .NET 10 |
 | ORM | EF Core 10 + Npgsql |
 | Database | PostgreSQL 17 (Docker Compose) |
@@ -18,11 +23,12 @@ A web-based inventory and sales management system for Jeffoy Auto and Motor Shop
 /backend/JeffoyAutoAndMotorShop.Api/   # .NET Web API (Controllers, DTOs, Models, Services, Data)
 /frontend/                             # React SPA (src/pages, src/lib, src/types, src/components)
 /openspec/                             # OpenSpec implementation specs (per feature slice)
+/.github/workflows/deploy-pages.yml     # GitHub Pages demo deploy
 /compose.yaml                          # PostgreSQL 17 database service
 /.env.example                          # Environment variable template (copy to .env)
 ```
 
-## Getting started
+## Getting started (real app with backend)
 
 ### Backend
 
@@ -65,48 +71,87 @@ A web-based inventory and sales management system for Jeffoy Auto and Motor Shop
 
    The frontend runs at `http://localhost:5173` and proxies API calls to `http://localhost:5122`.
 
-## MVP feature order
+## Demo mode (GitHub Pages, no backend)
+
+Set `VITE_DEMO_MODE=true` to run the frontend entirely in-browser with seeded data and `localStorage` persistence — no ASP.NET API or PostgreSQL required.
+
+```bash
+cd frontend
+VITE_DEMO_MODE=true npm run dev          # local demo
+VITE_DEMO_MODE=true VITE_BASE=/JeffoyAutoAndMotorShop/ npm run build  # Pages build
+```
+
+Demo accounts (demo mode only):
+
+| Role | Username | Password |
+|---|---|---|
+| Owner | `admin` | `Admin123!` |
+| Cashier (mechanic/front-counter) | `jeffoy` | `Jeffoy123!` |
+
+Demo data is stored in the browser (`localStorage`: `jaams_demo_state_v1` + `jaams_token`). Clearing site data resets the demo. **Do not** set `VITE_DEMO_MODE=true` for a real deployment.
+
+The GitHub Pages workflow (`.github/workflows/deploy-pages.yml`) builds with `VITE_DEMO_MODE=true` and publishes `frontend/dist` on push to `main`. Enable **Settings → Pages → Source: GitHub Actions** once.
+
+## Features
+
+- Dashboard with daily sales summary (transactions, items, totals, cash/GCash)
+- POS / checkout with cart and payment method
+- Products CRUD (SKU, price, stock, low-stock threshold)
+- Categories CRUD
+- Sales history + sale detail + void
+- Stock movements / restock
+- Reports (daily, CSV/JSON export, print preview)
+- Auth: JWT login, session restore on refresh, Owner-only Users page (create user with role)
+
+## MVP feature order (complete)
 
 1. Layout + Routing
-2. POS / Checkout (most valuable screen)
+2. POS / Checkout
 3. Products CRUD
 4. Categories CRUD
 5. Sales History + void
 6. Stock Movements / Restock
 7. Dashboard / Reports
-
-All six slices above are complete and verified against the live API.
+8. Users / role creation (Owner-only)
 
 ## Development workflow (KOS + OpenSpec)
 
 This project uses the **KOS Command Center** for project context and **OpenSpec** for per-slice implementation specs.
 
 | Tool | Purpose |
-| :--- | :--- |
-| KOS Command Center | `Documents/AI Workspace/KOS Command Center` — knowledge base: context, decisions, flows, learnings |
+|---|---|
+| KOS Command Center | Knowledge base: context, decisions, flows, learnings |
 | OpenSpec | `openspec/` — implementation specs driving AI code generation |
 | Repo | Actual codebase |
 
-Workflow per slice:
-
-1. Orient — read KOS `PROJECT-CONTEXT.md`, `User-Flows.md`, `handoff.md`
-2. Plan slice — pick one page/flow, sketch it, update `User-Flows.md`
-3. Write OpenSpec change — `openspec/changes/<slice>/` with `proposal.md` + `tasks.md`
-4. Implement — read KOS context + implement OpenSpec change strictly by tasks
-5. Test against real API — `dotnet run` + `npm run dev`, verify real behavior
-6. Wrap up — update KOS `handoff.md`, log gotchas in `memory.md`, archive OpenSpec change
+Workflow per slice: orient → plan → write OpenSpec change → implement → test against real API → wrap up (update handoff, log gotchas, archive change).
 
 ## Security status
 
-- **HTTPS redirection** enabled
-- **Authorization pipeline** configured but **no authentication scheme yet** (endpoints are public locally)
-- **Input validation** on all endpoints (SKU uniqueness, price checks, category active checks, etc.)
-- **Safe error responses** via `ProblemDetails`; no exception details leaked to client
-- **Soft deletes** (`IsActive`) on products/categories; sales use `Status` instead of hard deletes
-- **Secrets**: `.env` is gitignored; `.env.example` committed as template
-- **Logging**: Built-in ASP.NET Core console logging; `appsettings.json` sets `Default: Information`, `Microsoft.AspNetCore: Warning`
+- JWT authentication with role claims; session restored client-side from token claims (server validates)
+- Owner-only `GET/POST /api/auth/users` with role validation (`Cashier`, `Owner`)
+- Authorization pipeline configured (`[Authorize(Roles="Owner")]`)
+- Input validation on all endpoints (SKU uniqueness, price checks, category active checks, etc.)
+- Safe error responses via `ProblemDetails`; no exception details leaked to client
+- Soft deletes (`IsActive`) on products/categories; sales use `Status` instead of hard deletes
+- Secrets: `.env` is gitignored; `.env.example` committed as template
+- CORS / rate limiting / security headers planned (needed for cross-origin hosted API)
 
-**Not yet implemented**: JWT authentication, role-based access control, CORS policy for cross-origin API calls, rate limiting, security headers. These are planned next steps.
+## Testing
+
+```bash
+cd frontend
+npm run build            # typecheck + production build
+npx playwright test      # e2e (auth-session + select-states)
+npx tsc --noEmit         # typecheck
+```
+
+Backend:
+
+```bash
+cd backend/JeffoyAutoAndMotorShop.Api
+dotnet build
+```
 
 ## License
 
