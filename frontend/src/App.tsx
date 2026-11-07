@@ -1,6 +1,7 @@
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
 import { useContext, useState, useEffect, useRef } from 'react'
 import { AuthContext } from '@/contexts/AuthContext'
+import { DEMO_MODE } from '@/lib/config'
 
 const baseSections = [
   { to: '/', label: 'Dashboard', icon: '🏠' },
@@ -51,6 +52,11 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      {DEMO_MODE && (
+        <div className="bg-blue-600 px-3 py-1 text-center text-xs font-medium text-white">
+          Demo mode — data is stored in this browser only (localStorage). No backend connected.
+        </div>
+      )}
       <header className="border-b border-border px-4 py-3 flex items-center justify-between gap-4 bg-card sticky top-0 z-40 shadow-sm">
         <div className="flex shrink-0 flex-col">
           <span className="font-bold text-lg tracking-tight text-primary">JEFFOY</span>

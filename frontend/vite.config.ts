@@ -4,6 +4,8 @@ import { defineConfig } from 'vite';
 
 // https://vite.dev/config/
 export default defineConfig({
+  // Set VITE_BASE (e.g. "/JeffoyAutoAndMotorShop/") for GitHub Pages project sites.
+  base: process.env.VITE_BASE || '/',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {

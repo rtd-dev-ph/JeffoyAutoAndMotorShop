@@ -7,6 +7,17 @@
     <title>frontend</title>
   </head>
   <body>
+    <script>
+      // Restore path from 404.html SPA redirect (?p=/route)
+      (function (l) {
+        var p = new URLSearchParams(l.search).get('p');
+        if (p) {
+          var base = l.pathname.replace(/\/$/, '');
+          window.history.replaceState(null, '', base + p);
+        }
+      })(window.location);
+    </script>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -20,10 +20,13 @@ import { RequireAuth } from './components/RequireAuth.tsx'
 import { ReportsPage } from './pages/ReportsPage.tsx'
 import { UsersPage } from './pages/UsersPage.tsx'
 
+// basename from Vite base (e.g. /JeffoyAutoAndMotorShop/) for GitHub Pages.
+const basename = import.meta.env.BASE_URL?.replace(/\/$/, '') || '/'
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<RequireAuth><App /></RequireAuth>}>

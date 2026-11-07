@@ -2,8 +2,14 @@
  * API base URL — reads from Vite env or falls back to the backend development server.
  * During development, Vite proxies API requests (see vite.config.ts), so we use
  * the relative path "/api". In production, set VITE_API_BASE_URL to the deployed backend.
+ *
+ * VITE_DEMO_MODE=true enables a fully client-side demo (no backend required),
+ * suitable for static hosting such as GitHub Pages.
  */
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+export const DEMO_MODE =
+  import.meta.env.VITE_DEMO_MODE === 'true' ||
+  import.meta.env.VITE_DEMO_MODE === '1';
 
 export const ENDPOINTS = {
   // Categories

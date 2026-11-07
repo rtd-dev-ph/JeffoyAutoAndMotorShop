@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redirecting…</title>
+    <script>
+      // GitHub Pages SPA fallback: preserve the path and redirect to index.
+      // https://github.com/rafgraph/spa-github-pages
+      (function () {
+        var l = window.location;
+        var base = l.pathname.split('/').slice(0, 2).join('/'); // "/<repo>"
+        var rest = l.pathname.slice(base.length);
+        var redirect = base + '/?p=' + encodeURIComponent(rest + l.search + l.hash);
+        l.replace(redirect);
+      })();
+    </script>
+  </head>
+  <body>Redirecting…</body>
+</html>

@@ -5,13 +5,15 @@
  * 2. Sets JSON headers on both request and response
  * 3. Throws typed errors on non-2xx responses
  * 4. Parses JSON responses safely
+ * 5. VITE_DEMO_MODE: routes all requests to an in-browser demo store (no backend)
  *
  * Usage:
  *   import { apiClient } from '@/lib/apiClient';
  *   const categories = await apiClient.get<CategoryDto[]>('/api/categories');
  */
 
-import { API_BASE_URL } from './config';
+import { API_BASE_URL, DEMO_MODE } from './config';
+import { demoRequest, DemoApiError } from './demoData';
 
 const TOKEN_KEY = 'jaams_token';
 
@@ -45,6 +47,23 @@ async function request<T>(
   url: string,
   options: RequestInit = {},
 ): Promise<T> {
+  if (DEMO_MODE) {
+    try {
+      const method = (options.method || 'GET').toUpperCase();
+      const body = options.body ? JSON.parse(String(options.body)) : undefined;
+      return await demoRequest<T>(method, url, body);
+    } catch (err) {
+      if (err instanceof DemoApiError) {
+        if (err.status === 401) {
+          localStorage.removeItem(TOKEN_KEY);
+          window.dispatchEvent(new Event('auth:logout'));
+        }
+        throw new ApiError(err.message, err.status, err.statusText);
+      }
+      throw err;
+    }
+  }
+
   const token = localStorage.getItem(TOKEN_KEY);
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
