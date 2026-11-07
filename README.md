@@ -3,18 +3,18 @@
 A web-based inventory and sales management system for **Jeffoy Auto and Motor Shop** — POS, product/category/inventory management, stock movements, sales history, and reporting.
 
 - Repo: https://github.com/rtd-dev-ph/JeffoyAutoAndMotorShop
-- Live demo (GitHub Pages, frontend-only, no backend): https://rtd-dev-ph.github.io/JeffoyAutoAndMotorShop/
+- Live demo : https://rtd-dev-ph.github.io/JeffoyAutoAndMotorShop/
 
 ## Tech stack
 
-| Layer | Choice |
-|---|---|
-| Backend | ASP.NET Core Web API, .NET 10 |
-| ORM | EF Core 10 + Npgsql |
-| Database | PostgreSQL 17 (Docker Compose) |
-| Frontend | React 19 + TypeScript + Vite |
-| Styling | Tailwind CSS v4 + shadcn/ui |
-| Routing | react-router-dom |
+| Layer      | Choice                           |
+| ---------- | -------------------------------- |
+| Backend    | ASP.NET Core Web API, .NET 10    |
+| ORM        | EF Core 10 + Npgsql              |
+| Database   | PostgreSQL 17 (Docker Compose)   |
+| Frontend   | React 19 + TypeScript + Vite     |
+| Styling    | Tailwind CSS v4 + shadcn/ui      |
+| Routing    | react-router-dom                 |
 | API client | Typed `apiClient.ts` in frontend |
 
 ## Repo structure
@@ -83,9 +83,9 @@ VITE_DEMO_MODE=true VITE_BASE=/JeffoyAutoAndMotorShop/ npm run build  # Pages bu
 
 Demo accounts (demo mode only):
 
-| Role | Username | Password |
-|---|---|---|
-| Owner | `admin` | `Admin123!` |
+| Role                             | Username | Password     |
+| -------------------------------- | -------- | ------------ |
+| Owner                            | `admin`  | `Admin123!`  |
 | Cashier (mechanic/front-counter) | `jeffoy` | `Jeffoy123!` |
 
 Demo data is stored in the browser (`localStorage`: `jaams_demo_state_v1` + `jaams_token`). Clearing site data resets the demo. **Do not** set `VITE_DEMO_MODE=true` for a real deployment.
@@ -118,11 +118,11 @@ The GitHub Pages workflow (`.github/workflows/deploy-pages.yml`) builds with `VI
 
 This project uses the **KOS Command Center** for project context and **OpenSpec** for per-slice implementation specs.
 
-| Tool | Purpose |
-|---|---|
-| KOS Command Center | Knowledge base: context, decisions, flows, learnings |
-| OpenSpec | `openspec/` — implementation specs driving AI code generation |
-| Repo | Actual codebase |
+| Tool               | Purpose                                                       |
+| ------------------ | ------------------------------------------------------------- |
+| KOS Command Center | Knowledge base: context, decisions, flows, learnings          |
+| OpenSpec           | `openspec/` — implementation specs driving AI code generation |
+| Repo               | Actual codebase                                               |
 
 Workflow per slice: orient → plan → write OpenSpec change → implement → test against real API → wrap up (update handoff, log gotchas, archive change).
 
