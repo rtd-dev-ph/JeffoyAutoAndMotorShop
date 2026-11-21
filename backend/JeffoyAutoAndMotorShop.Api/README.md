@@ -19,7 +19,7 @@ JeffoyAutoAndMotorShop/
 │       ├── Models/            # Domain models
 │       ├── Services/          # Business logic services
 │       ├── Program.cs         # Application entry point
-│       ├── appsettings.json   # Base configuration
+│       ├── appsettings.json   # Base configuration (no secrets)
 │       └── JeffoyAutoAndMotorShop.Api.csproj
 └── frontend/
     └── (planned React + TypeScript + Vite app)
@@ -45,33 +45,49 @@ JeffoyAutoAndMotorShop/
 1. Clone the repository and navigate to the project root.
 
 2. Copy the example environment file and set your password:
+
    ```cmd
    copy .env.example .env
    # Edit .env and replace "replace_with_a_local_password" with a strong password
    ```
 
 3. Start PostgreSQL:
+
    ```cmd
    docker compose up -d
    ```
 
 4. Restore and build:
+
    ```cmd
    cd backend\JeffoyAutoAndMotorShop.Api
    dotnet restore
    dotnet build
    ```
 
-5. Set the connection string via user secrets (replace `YOUR_PASSWORD` with the password from `.env`):
+5. Set the connection string and JWT key via **user secrets** (never commit these):
+
    ```cmd
+   cd backend\JeffoyAutoAndMotorShop.Api
    dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=jaams_db;Username=jaams_admin;Password=YOUR_PASSWORD"
+   dotnet user-secrets set "Jwt:Key" "a-strong-random-key-change-in-production"
    ```
 
 6. Run the API:
+
    ```cmd
    dotnet run
    ```
 
+   The API reads settings from `appsettings.json` first, then user secrets, then environment variables. `appsettings.json` is committed with empty secrets (safe to share); actual values live in user secrets locally.
+
 7. Verify: `curl http://localhost:5122/health/database`
 
 See the [Setup Cheatsheet](Development/Jeffoy%20Auto%20and%20Shop%20Setup%20Cheatsheet.md) for detailed steps.
+
+## Security
+
+- `appsettings.json` is committed with empty `DefaultConnection` and `Jwt:Key` — no credentials in git.
+- `DesignTimeDbContextFactory.cs` has no hardcoded fallback connection string.
+- `.env` and `.env.*` are gitignored (except `.env.example`).
+- `appsettings.json` now exposes no connection credentials or JWT signing key.

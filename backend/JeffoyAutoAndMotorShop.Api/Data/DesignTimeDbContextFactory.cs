@@ -24,11 +24,13 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbConte
 
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-        // If no connection string found, use a fallback for migration creation
-        // This allows migrations to be created even without full database configuration
+        // No fallback connection string: credentials must come from user secrets,
+        // environment variables, or appsettings.json — never hardcoded.
         if (string.IsNullOrWhiteSpace(connectionString))
         {
-            connectionString = "Host=localhost;Port=5432;Database=jaams_db;Username=jaams_admin;Password=placeholder";
+            throw new InvalidOperationException(
+                "Database connection string is not configured. Set ConnectionStrings:DefaultConnection " +
+                "via user secrets or environment variables.");
         }
 
         var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
